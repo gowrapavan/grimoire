@@ -11,7 +11,7 @@
 //  - Optional settings (Cloudflare Pages > Settings > Variables): SITE_URL, GOOGLE_SITE_VERIFICATION, GOOGLE_VERIFICATION_FILE,
 //    BING_SITE_VERIFICATION, CANONICAL_REDIRECT.
 // If anything goes wrong while building a page, the plain app is served, so the site never breaks because of this file.
-import { authorEntries, authorHead, bookHead, esc, homeHead, notFoundHead, readHead, renderHead, searchHead, shardOf, shelfHead, yearsText, type BookInfo, type Head } from '../src/lib/seoText';
+import { authorEntries, authorHead, bookHead, esc, homeHead, notFoundHead, readHead, renderHead, searchHead, shardOf, shelfHead, yearsText, type BookInfo, type Head } from "../src/lib/seoText.ts";
 import { AUTHOR_MIN_BOOKS, authorFromRow, authorPath, authorShard, isSlug, type AuthorInfo } from '../src/lib/authors';
 import { LANGUAGES } from '../src/lib/languages';
 
