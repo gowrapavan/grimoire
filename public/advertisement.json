@@ -1,0 +1,11 @@
+{
+"ad1": {
+  "title": "ZiloPlay",
+  "image": "/ads/ziloplay-desktop.png",
+  "mobileImage": "/ads/ziloplay-mobile.png",
+  "video": "",
+  "mobileVideo": "",
+  "link": "https://..."
+},
+  "ad2": { "title": "My other app", "image": "", "mobileImage": "", "video": "", "mobileVideo": "", "link": "" }
+}

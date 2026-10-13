@@ -1,0 +1,7 @@
+Text#,Type,Issued,Title,Language,Authors,Subjects,LoCC,Bookshelves
+1,Text,1971-12-01,"Test Title One, with comma",en,"Doe, Jane, 1800-1870","Fiction -- Test; Poetry",PS,
+2,Text,2000-01-01,"Multi
+line title",fr; en,"Roe, Richard",Essays,PQ,
+3,Sound,2001-01-01,An audiobook,en,Someone,Audio,,
+4,Text,2002-02-02,,en,Nobody,Void,,
+x9,Text,2002-02-02,Bad id,en,Nobody,Void,,
