@@ -1,0 +1,16 @@
+
+[build]
+  command = "npm run build:catalog && npm run build"
+  publish = "dist"
+
+# Serve robots.txt as a static file
+[[headers]]
+  for = "/robots.txt"
+  [headers.values]
+    Content-Type = "text/plain; charset=utf-8"
+
+# Serve sitemap XML files with the correct content type
+[[headers]]
+  for = "/sitemap*.xml"
+  [headers.values]
+    Content-Type = "application/xml; charset=utf-8"
