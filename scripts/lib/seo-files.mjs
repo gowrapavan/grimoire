@@ -9,7 +9,8 @@ import { AUTHOR_LIST, AUTHOR_MIN_BOOKS, SUBJECT_MIN_BOOKS, authorName, authorSha
 export const META_SHARD = 500;      // keep equal to META_SHARD in src/lib/seoText.ts (a test checks it)
 export const SITEMAP_CHUNK = 20000; // sitemaps allow up to 50,000 per file
 
-const xml = (urls) => `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${urls.map((u) => `<url><loc>__ORIGIN__${u}</loc></url>`).join('')}</urlset>`;
+const xmlEscape = (value) => String(value).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\"/g, '&quot;').replace(/'/g, '&apos;');
+const xml = (urls) => `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${urls.map((u) => `<url><loc>${xmlEscape('__ORIGIN__' + u)}</loc></url>`).join('')}</urlset>`;
 const chunks = (arr) => { const out = []; for (let i = 0; i < arr.length; i += SITEMAP_CHUNK) out.push(arr.slice(i, i + SITEMAP_CHUNK)); return out.length ? out : [[]]; };
 
 export function buildSeoFiles(index, years = new Map()) {

@@ -48,7 +48,7 @@ export default function Reader() {
       {mode.kind === 'loading' && <div role="status" className="grid min-h-[40vh] place-items-center border border-line bg-card/60"><div className="text-center"><div className="skeleton mx-auto mb-4 h-24 w-16 border border-line" /><p className="font-display text-xl">Opening the book…</p></div></div>}
       {mode.kind === 'text' && <TextReader id={id} parsed={mode.parsed} />}
       {mode.kind === 'frame' && <>
-      <p className="mb-2 text-sm italic text-muted">This book can’t be shown as pages here, so this is Project Gutenberg’s own page, shown for your visit only. Grimoire does not copy or store it. If the page below is blank or says it refused to connect, Gutenberg does not allow it here or has no HTML edition of this book. Use the buttons above instead.</p>
+      <p className="mb-2 text-sm italic text-muted">This book can’t be shown as pages here, so this is Project Gutenberg’s own page, shown for your visit only. Biblorya does not copy or store it. If the page below is blank or says it refused to connect, Gutenberg does not allow it here or has no HTML edition of this book. Use the buttons above instead.</p>
       <div className="mb-3 flex flex-wrap items-center gap-2 border border-line bg-card/70 p-3 text-sm">
         <span className="italic text-muted">Blank page, or an error such as “504 Gateway Time-out”? That comes from Project Gutenberg’s server being busy.</span>
         <button type="button" onClick={() => { setLoaded(false); setTries((n) => n + 1); }} className="border border-oxblood bg-oxblood px-3 py-1.5 font-display text-on hover:bg-oxblood-dark">Try again</button>

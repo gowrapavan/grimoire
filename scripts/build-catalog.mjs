@@ -11,7 +11,7 @@ const t0 = Date.now(); let body;
 if (env.FEED_FILE) body = fs.createReadStream(env.FEED_FILE, { encoding: 'utf8' });
 else {
   console.log('Downloading', FEED);
-  const res = await fetch(FEED, { headers: { 'User-Agent': `GrimoireCatalogBuild/0.2 (${env.IMPORT_CONTACT ?? 'personal project'})` } });
+  const res = await fetch(FEED, { headers: { 'User-Agent': `BibloryaCatalogBuild/1.0 (${env.IMPORT_CONTACT ?? 'personal project'})` } });
   if (!res.ok) { console.error(`Feed download failed: HTTP ${res.status}`); process.exit(1); }
   body = Readable.fromWeb(res.body).setEncoding('utf8');
 }

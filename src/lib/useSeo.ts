@@ -22,8 +22,8 @@ export function applyHead(h: Head) {
   link.href = t.canonical;
   document.head.querySelectorAll('meta[property="book:tag"], meta[property="og:image"], meta[property="og:image:alt"], meta[property="og:image:width"], meta[property="og:image:height"], meta[name="twitter:image"], meta[name="twitter:image:alt"]').forEach((e) => e.remove());
   for (const [a, k, v] of t.metas) { if (k === 'book:tag' || k.includes('image')) { const el = document.createElement('meta'); el.setAttribute(a, k); el.setAttribute('content', v); document.head.appendChild(el); } else meta(a, k, v); }
-  let ld = document.getElementById('grimoire-ld');
-  if (t.ld) { if (!ld) { ld = document.createElement('script'); ld.id = 'grimoire-ld'; ld.setAttribute('type', 'application/ld+json'); document.head.appendChild(ld); } ld.textContent = t.ld; } else ld?.remove();
+  let ld = document.getElementById('biblorya-ld');
+  if (t.ld) { if (!ld) { ld = document.createElement('script'); ld.id = 'biblorya-ld'; ld.setAttribute('type', 'application/ld+json'); document.head.appendChild(ld); } ld.textContent = t.ld; } else ld?.remove();
 }
 /** Pass the page's head, or null while the page is still loading (the previous tags stay until then). */
 export function useSeo(h: Head | null) {

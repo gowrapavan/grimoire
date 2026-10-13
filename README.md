@@ -1,4 +1,19 @@
-# Grimoire (static catalog, no database)
+# Biblorya (static catalog, no database)
+
+## Netlify deployment
+
+This project uses a Netlify Edge Function (`netlify/edge-functions/seo.ts`) to run the SEO handler in `worker/index.ts`. The `dist/_worker.js` artifact is retained only for compatibility with the existing build script; Netlify does not execute it as a Cloudflare Pages worker.
+
+- Build command: `npm run build:catalog && npm run build`
+- Publish directory: `dist`
+- Configuration: `netlify.toml`
+- Edge Function route: `/*`
+- Optional Netlify environment variable: `SITE_URL` set to the final canonical HTTPS origin (for example `https://biblorya.netlify.app` after that site name is assigned).
+
+The edge handler creates `/robots.txt`, `/sitemap.xml`, `/sitemaps/sitemap-*.xml`, book-specific HTML metadata, share-card tags, and real 404 responses. Generated catalog metadata is read from `public/catalog/`. The static `public/robots.txt` is a fallback; keep its sitemap origin synchronized with the final deployment domain if the edge function is unavailable.
+
+Before deployment, run `npm test`, then `npm run build:catalog && npm run build`. The catalog build downloads the current Project Gutenberg CSV unless `FEED_FILE` is supplied. Validate the live `/robots.txt`, `/sitemap.xml`, one book URL, and a nonexistent book URL after deploying.
+
 Real Project Gutenberg catalog data, searched in the browser. No Supabase, no server, no keys.
 
 ## Run it (Windows PowerShell, in this folder)
@@ -11,9 +26,10 @@ Quick pilot first:  `$env:LIMIT="500"; npm run build:catalog`  (then later clear
     npm test
     npm run build
 
-## Deploy (Cloudflare Pages)
-Run `npm run build:catalog` and `npm run build`, then upload the whole `dist` folder (Pages > Create > Direct Upload). Upload the folder itself, not a zip of the folder, and keep `_worker.js` and `_routes.json` inside it: they make the search-engine and share-card tags work (see SEO below).
-Refresh the data by repeating these steps. Gutenberg updates its file weekly.
+## Deploy (Netlify)
+Connect the GitHub repository in Netlify and use the build command `npm run build:catalog && npm run build` with publish directory `dist`. Keep `netlify.toml` and `netlify/edge-functions/seo.ts` in the repository. Set `SITE_URL` in the Netlify environment variables to the final canonical HTTPS origin after the site name or custom domain is assigned. Netlify executes the Edge Function; it does not execute `dist/_worker.js` as a Cloudflare Pages worker.
+
+Refresh the catalogue by redeploying. Gutenberg updates its file periodically.
 
 ## Notes
 - The app never shows made-up books. If public/catalog/index.json is missing, it says so.
@@ -55,7 +71,7 @@ The app is a single-page app, so on its own Google would have to run JavaScript 
 - `/og/<id>.jpg` is the share picture: the book's cover from Project Gutenberg served from your own address (cached for a week). If Gutenberg has no cover or is slow, `public/og-default.png` (1200x630) is used. Replace that file to change the default picture.
 - Access and copyright: every book page links to the original Project Gutenberg page, says the access status is "per Project Gutenberg", and says copyright rules differ by country (with a link to Gutenberg's permissions page). The site makes no claim of its own that a text is public domain.
 - Sitemaps: `/sitemap.xml` lists `sitemap-pages` (home, catalogue, subject pages), `sitemap-books-N` (every book) and `sitemap-authors-N` (authors with 2 or more books), 20,000 addresses per file. `robots.txt` points to it.
-- `npm run build:catalog` writes the small files the worker reads: `public/catalog/meta/` (500 books each), `authors/` (64 files), `subjects.json`, `sitemaps/` and `seo.json`. Cloudflare Pages allows 20,000 files per site, so there is no one-HTML-file-per-book. Birth and death years on author pages are the ones the Project Gutenberg catalogue gives; authors without years show none.
+- `npm run build:catalog` writes the small files the worker reads: `public/catalog/meta/` (500 books each), `authors/` (64 files), `subjects.json`, `sitemaps/` and `seo.json`. The catalogue uses compact metadata shards rather than generating one HTML file per book. Birth and death years on author pages are the ones the Project Gutenberg catalogue gives; authors without years show none.
 - `public/_routes.json` sends page addresses to the worker and leaves images, scripts and catalog files to the static host. `public/_headers` sets long caching for built files and one-hour caching for catalog files.
 
 ### Settings (Cloudflare Pages > Settings > Variables and Secrets)
@@ -68,9 +84,9 @@ The app is a single-page app, so on its own Google would have to run JavaScript 
 | `BING_SITE_VERIFICATION` | the Bing tag value | Adds Bing's verification tag. |
 
 ### Submit the site to Google Search Console
-1. Deploy first (`npm run build:catalog`, `npm run build`, upload the whole `dist` folder, which must contain `_worker.js` and `_routes.json`). Set `SITE_URL`.
+1. Deploy through Netlify using `npm run build:catalog && npm run build` and publish `dist`. Set `SITE_URL` in the Netlify environment variables.
 2. Open https://search.google.com/search-console and choose Add property.
-3. Recommended: choose **Domain** and verify with the DNS TXT record Google shows (add it where your domain's DNS is managed; with Cloudflare DNS it is one click). It covers http, https, www and non-www together.
+3. Recommended: choose **Domain** and verify with the DNS TXT record Google shows (add it where your domain's DNS is managed; in your domain DNS provider). It covers http, https, www and non-www together.
    Alternative: choose **URL prefix**, enter your `SITE_URL`, pick the **HTML tag** method, copy the `content` value into the `GOOGLE_SITE_VERIFICATION` setting, redeploy, then click Verify. Or pick the **HTML file** method and put the file name in `GOOGLE_VERIFICATION_FILE`.
 4. In Search Console open **Sitemaps** and submit `sitemap.xml`. Status should become Success, with the three sitemap files listed.
 5. Open **URL Inspection**, paste the home page, a few book pages and an author page, and use **Request indexing** for each. This is optional and limited to a few a day.
@@ -81,7 +97,7 @@ The app is a single-page app, so on its own Google would have to run JavaScript 
 - Open `/robots.txt`, `/sitemap.xml`, one book page and one author page; use View page source and look for the title, canonical, `og:image` and the `application/ld+json` block.
 - Paste a book link in Facebook's Sharing Debugger and the Rich Results Test (https://search.google.com/test/rich-results).
 - An address that does not exist (for example `/book/999999999`) should show "Page not found" with status 404 (browser developer tools, Network tab).
-- Test locally with the real Cloudflare runtime: `npm run build`, copy a built `public/catalog` into `dist/catalog` if needed, then `npx wrangler pages dev dist`. Plain `npm run dev` does not run the worker; page tags are then set by the browser only.
+- The Vite development server does not run the Netlify Edge Function. Verify server-generated tags after deployment or use Netlify CLI to test the edge runtime locally.
 
 ### Page speed notes
 - A book page reads one small metadata file (about 100 KB) to show the book, and loads the full catalogue index afterwards, in the background, for "More like this". Reader, My shelf and author pages are loaded only when opened. Covers reserve their space (no layout jump), the main cover loads first, the font stylesheet no longer blocks the first paint, and built files are cached for a year.

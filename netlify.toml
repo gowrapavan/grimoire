@@ -1,16 +1,27 @@
-
 [build]
   command = "npm run build:catalog && npm run build"
   publish = "dist"
 
-# Serve robots.txt as a static file
+# Run the SEO handler for page requests, robots.txt, sitemap.xml, and book covers.
+# The handler delegates static assets to Netlify and returns true 404 responses.
+[[edge_functions]]
+  function = "seo"
+  path = "/*"
+
 [[headers]]
   for = "/robots.txt"
   [headers.values]
     Content-Type = "text/plain; charset=utf-8"
+    X-Content-Type-Options = "nosniff"
 
-# Serve sitemap XML files with the correct content type
 [[headers]]
-  for = "/sitemap*.xml"
+  for = "/sitemap.xml"
   [headers.values]
     Content-Type = "application/xml; charset=utf-8"
+    X-Content-Type-Options = "nosniff"
+
+[[headers]]
+  for = "/sitemaps/*.xml"
+  [headers.values]
+    Content-Type = "application/xml; charset=utf-8"
+    X-Content-Type-Options = "nosniff"

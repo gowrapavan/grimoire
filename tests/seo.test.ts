@@ -24,7 +24,7 @@ async function env(extra: Record<string, string> = {}, rows?: Record<string, unk
   } } };
 }
 const get = async (e: Env, path: string, host = 'https://x.test') => { const r = await worker.fetch(new Request(host + path), e as never); return { r, text: await r.text() }; };
-const ld = (text: string) => JSON.parse(/<script type="application\/ld\+json" id="grimoire-ld">([\s\S]*?)<\/script>/.exec(text)![1]);
+const ld = (text: string) => JSON.parse(/<script type="application\/ld\+json" id="biblorya-ld">([\s\S]*?)<\/script>/.exec(text)![1]);
 afterEach(() => vi.unstubAllGlobals());
 
 describe('search-engine text', () => {
@@ -72,15 +72,15 @@ describe('server pages', () => {
   it('a book page has its own title, description, canonical, share card, structured data and readable text', async () => {
     const { r, text } = await get(await env(), '/book/5');
     expect(r.status).toBe(200); expect(text.match(/<title>/g)).toHaveLength(1); expect(text.match(/name="description"/g)).toHaveLength(1);
-    expect(text).toContain('<title>Title 5 of Zebra5 by Name5 Author | Grimoire</title>'); expect(text).toContain('<link rel="canonical" href="https://x.test/book/5"/>');
+    expect(text).toContain('<title>Title 5 of Zebra5 by Name5 Author | Biblorya</title>'); expect(text).toContain('<link rel="canonical" href="https://x.test/book/5"/>');
     expect(text).toContain('property="og:image" content="https://x.test/og/5.jpg"'); expect(text).toContain('property="og:type" content="book"'); expect(text).toContain('name="twitter:card" content="summary"');
     expect(text).toContain('<h1>Title 5 of Zebra5</h1>'); expect(text).toContain('href="/author/name5-author"'); expect(text).toContain('Copyright rules differ by country'); expect(text).not.toContain('Default description');
     const j = ld(text); expect(j[0]['@type']).toBe('Book'); expect(j[0].url).toBe('https://x.test/book/5'); expect(j[0].author[0]).toEqual({ '@type': 'Person', name: 'Name5 Author', url: 'https://x.test/author/name5-author' }); expect(j[0].publisher.name).toBe('Project Gutenberg');
-    expect(j[1].itemListElement.map((x: { name: string }) => x.name)).toEqual(['Grimoire', 'Name5 Author', 'Title 5 of Zebra5']);
+    expect(j[1].itemListElement.map((x: { name: string }) => x.name)).toEqual(['Biblorya', 'Name5 Author', 'Title 5 of Zebra5']);
   });
   it('an author page: Person data, a book list, canonical; one-book authors are noindex; unknown ones are 404', async () => {
     const e = await env(); const { r, text } = await get(e, '/author/name5-author');
-    expect(r.status).toBe(200); expect(r.headers.get('x-robots-tag')).toBeNull(); expect(text).toContain('<title>Name5 Author (1800–1850): 2 free ebooks | Grimoire</title>'); expect(text).toContain('<link rel="canonical" href="https://x.test/author/name5-author"/>');
+    expect(r.status).toBe(200); expect(r.headers.get('x-robots-tag')).toBeNull(); expect(text).toContain('<title>Name5 Author (1800–1850): 2 free ebooks | Biblorya</title>'); expect(text).toContain('<link rel="canonical" href="https://x.test/author/name5-author"/>');
     expect(text).toContain('<h1>Name5 Author</h1>'); expect(text).toContain('href="/book/45"'); const j = ld(text); expect(j.map((x: { '@type': string }) => x['@type'])).toEqual(['Person', 'ItemList', 'BreadcrumbList']); expect(j[0].birthDate).toBe('1800');
     const thin = await get(e, '/author/name25-author'); expect(thin.r.status).toBe(200); expect(thin.r.headers.get('x-robots-tag')).toContain('noindex'); expect(thin.text).toContain('content="noindex,follow"');
     expect((await get(e, '/author/name5-author?page=2')).r.headers.get('x-robots-tag')).toContain('noindex');
@@ -123,7 +123,7 @@ describe('server pages', () => {
   });
   it('robots.txt and the sitemap index and files use the site address', async () => {
     const e = await env();
-    const rb = (await get(e, '/robots.txt')).text; expect(rb).toContain('Sitemap: https://x.test/sitemap.xml'); expect(rb).toContain('Disallow: /search?*q='); expect(rb).toContain('Disallow: /author/*?*page='); expect(rb).not.toContain('Disallow: /book');
+    const rb = (await get(e, '/robots.txt')).text; expect(rb).toContain('Sitemap: https://x.test/sitemap.xml'); expect(rb).toContain('Allow: /'); expect(rb).not.toContain('Disallow: /book'); expect(rb).not.toContain('Disallow: /search');
     const idx = (await get(e, '/sitemap.xml')).text; for (const n of ['sitemap-pages', 'sitemap-books-1', 'sitemap-authors-1']) expect(idx).toContain(`<loc>https://x.test/sitemaps/${n}.xml</loc>`);
     const pages = (await get(e, '/sitemaps/sitemap-pages.xml')).text; expect(pages).toContain('<loc>https://x.test/</loc>'); expect(pages).toContain('<loc>https://x.test/search</loc>'); expect(pages).not.toContain('__ORIGIN__');
     expect((await get(e, '/sitemaps/sitemap-books-1.xml')).text).toContain('<loc>https://x.test/book/60</loc>'); expect((await get(e, '/sitemaps/sitemap-authors-1.xml')).text).toContain('<loc>https://x.test/author/name5-author</loc>');

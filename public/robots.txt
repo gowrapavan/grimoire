@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://biblorya.netlify.app/sitemap.xml

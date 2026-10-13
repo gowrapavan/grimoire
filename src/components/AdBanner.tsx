@@ -18,8 +18,8 @@ export function AdBanner({ slot, className = '' }: { slot: AdSlot; className?: s
   if (!ad || !link || !(video || image)) return null;
   const title = ad.title || 'My other app';
   return (
-    <aside aria-label="More from the maker of Grimoire" className={className}>
-      <p className="mb-1 text-sm italic text-muted">Advertisement: more from the maker of Grimoire</p>
+    <aside aria-label="More from the maker of Biblorya" className={className}>
+      <p className="mb-1 text-sm italic text-muted">Advertisement: more from the maker of Biblorya</p>
       <a href={link} target="_blank" rel="noopener noreferrer sponsored" aria-label={`${title} (opens in a new tab)`} className="block overflow-hidden border-4 border-double border-line bg-card">
         {video
           ? <video key={video} src={video} poster={image || undefined} autoPlay muted loop playsInline aria-hidden="true" className="block h-auto w-full" />

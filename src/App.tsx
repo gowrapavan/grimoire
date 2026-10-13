@@ -27,7 +27,7 @@ function Header({ dark, toggleTheme }: { dark: boolean; toggleTheme: () => void 
   return (
     <header className="border-b-4 border-double border-line">
       <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-3 gap-y-3 px-3 py-3 sm:gap-x-5 sm:px-4">
-        <Link to="/" className="flex items-center gap-2 no-underline sm:gap-3"><span className="scale-90 sm:scale-100"><Mark /></span><span className="font-display text-[1.35rem] text-oxblood sm:text-3xl">Grimoire</span></Link>
+        <Link to="/" className="flex items-center gap-2 no-underline sm:gap-3"><span className="scale-90 sm:scale-100"><Mark /></span><span className="font-display text-[1.35rem] text-oxblood sm:text-3xl">Biblorya</span></Link>
         {pathname !== '/' && <div className="order-last w-full lg:order-none lg:w-auto lg:max-w-md lg:flex-1"><SearchBox /></div>}
         <nav aria-label="Main" className="ml-auto flex items-center gap-2 text-[0.95rem] sm:gap-5 sm:text-lg">
           <NavLink to="/search?sort=title" className={() => `no-underline hover:text-oxblood ${pathname === '/search' ? 'text-oxblood underline' : ''}`}>Browse</NavLink>
@@ -65,7 +65,7 @@ function Shell({ children }: { children: React.ReactNode }) {
             <div><p className="font-display text-xl text-footer-ink">Where the records come from</p>
               <p className="mt-2">The Project Gutenberg catalog feed (pg_catalog.csv). On a book page, the description, first publication year and author notes are looked up from Open Library when available.</p></div>
             <div><p className="font-display text-xl text-footer-ink">About access</p>
-              <p className="mt-2">Grimoire keeps records only, never book files. Public-domain and access status are claims made by each source and can differ by country. Always check the source page, and see Project Gutenberg’s <a className="underline" href="https://www.gutenberg.org/policy/permission.html" target="_blank" rel="noopener noreferrer">permissions page</a> before reusing a text.</p></div>
+              <p className="mt-2">Biblorya keeps records only, never book files. Public-domain and access status are claims made by each source and can differ by country. Always check the source page, and see Project Gutenberg’s <a className="underline" href="https://www.gutenberg.org/policy/permission.html" target="_blank" rel="noopener noreferrer">permissions page</a> before reusing a text.</p></div>
             <div><p className="font-display text-xl text-footer-ink">Corrections and removal</p>
               <p className="mt-2">To correct or remove a record, email <a className="underline" href="mailto:gowrapavankumar2004@gmail.com">gowrapavankumar2004@gmail.com</a> with the record link. We will respond and remove it on request.</p></div>
           </div>

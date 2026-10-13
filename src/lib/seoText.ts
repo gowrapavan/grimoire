@@ -4,7 +4,7 @@ import { authorParts } from './openlibrary';
 import { LANGUAGES } from './languages';
 import { authorName, authorPath, authorSlug, type AuthorInfo } from './authors';
 
-export const SITE = 'Grimoire';
+export const SITE = 'Biblorya';
 export const META_SHARD = 500;               // books per small metadata file (scripts/lib/seo-files.mjs uses the same number)
 export const shardOf = (id: number | string) => Math.floor(Number(id) / META_SHARD);
 
@@ -108,5 +108,5 @@ export function headTags(h: Head, origin: string) {
 /** The same tags as HTML text, for the server. */
 export function renderHead(h: Head, origin: string): string {
   const t = headTags(h, origin);
-  return `<title>${esc(t.title)}</title>\n<link rel="canonical" href="${esc(t.canonical)}"/>\n` + t.metas.map(([a, k, v]) => `<meta ${a}="${k}" content="${esc(v)}"/>`).join('\n') + (t.ld ? `\n<script type="application/ld+json" id="grimoire-ld">${t.ld}</script>` : '');
+  return `<title>${esc(t.title)}</title>\n<link rel="canonical" href="${esc(t.canonical)}"/>\n` + t.metas.map(([a, k, v]) => `<meta ${a}="${k}" content="${esc(v)}"/>`).join('\n') + (t.ld ? `\n<script type="application/ld+json" id="biblorya-ld">${t.ld}</script>` : '');
 }

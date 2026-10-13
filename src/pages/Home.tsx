@@ -20,7 +20,7 @@ export default function Home() {
     <div className="space-y-10 sm:space-y-16">
       <section className="border-4 border-double border-line bg-card/70 px-3 pb-6 pt-8 text-center sm:px-6 sm:pb-8 sm:pt-12">
         <Ornament />
-        <h1 className="mt-4 text-4xl text-oxblood sm:mt-5 sm:text-5xl md:text-7xl">Grimoire</h1>
+        <h1 className="mt-4 text-4xl text-oxblood sm:mt-5 sm:text-5xl md:text-7xl">Biblorya</h1>
         <p className="mx-auto mt-3 max-w-xl text-lg italic sm:mt-4 sm:text-xl text-ink-2">A catalogue of books free to read, gathered from the Project Gutenberg collection.</p>
         <div className="mx-auto mt-5 flex max-w-2xl justify-center sm:mt-8"><SearchBox big /></div>
         <p className="mt-3 text-muted">
