@@ -1,8 +1,8 @@
 // Everything about page titles, descriptions, share cards (Open Graph / Twitter) and structured data.
 // Plain functions with no browser code, so the same text is made in the browser (useSeo.ts) and on the server (worker/index.ts).
-import { authorParts } from './openlibrary';
-import { LANGUAGES } from './languages';
-import { authorName, authorPath, authorSlug, type AuthorInfo } from './authors';
+import { authorParts } from './openlibrary.ts';
+import { LANGUAGES } from './languages.ts';
+import { authorName, authorPath, authorSlug, type AuthorInfo } from './authors.ts';
 
 export const SITE = 'Biblorya';
 export const META_SHARD = 500;               // books per small metadata file (scripts/lib/seo-files.mjs uses the same number)

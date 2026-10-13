@@ -1,6 +1,6 @@
 // Author pages: one address per author, /author/<slug>. Pure functions, shared by the app, the server (worker/index.ts) and tests.
 // scripts/lib/authors.mjs has a copy for the catalogue build; tests/seo.test.ts checks both give the same answers.
-import { authorParts } from './openlibrary';
+import { authorParts } from './openlibrary.ts';
 export const AUTHOR_SHARDS = 64;        // authors are split over this many small files: catalog/authors/<n>.json
 export const AUTHOR_MIN_BOOKS = 2;      // authors with fewer books get a page but are kept out of search results and the sitemap (thin pages)
 export const AUTHOR_LIST = 40;          // titles stored per author for the server-rendered list
