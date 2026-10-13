@@ -9,7 +9,7 @@
     "preview": "vite preview",
     "build:catalog": "node scripts/build-catalog.mjs",
     "test": "vitest run",
-    "build:worker": "esbuild worker/index.ts --bundle --format=esm --target=es2022 --minify --outfile=dist/_worker.js"
+    "build:worker": "esbuild worker/index.ts --bundle --format=esm --target=es2022 --minify --outfile=dist/_worker.js && esbuild worker/index.ts --bundle --format=esm --platform=neutral --target=es2022 --outfile=dist/seo-worker.js"
   },
   "dependencies": {
     "react": "^19.3.0",
